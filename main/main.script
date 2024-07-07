@@ -1,0 +1,53 @@
+local camera = require "orthographic.camera"
+
+local function hex2rgba(hex, w)
+	local alpha = 1
+	if w then
+		alpha = w
+	end
+	hex = hex:gsub("#", "")
+	local rgba =
+		vmath.vector4(
+		tonumber("0x" .. hex:sub(1, 2)) / 255,
+		tonumber("0x" .. hex:sub(3, 4)) / 255,
+		tonumber("0x" .. hex:sub(5, 6)) / 255,
+		alpha
+	)
+	return rgba
+end
+
+function init(self)
+	msg.post("@render:", "clear_color", {color = hex2rgba("#8196AE")})
+	msg.post(".", "acquire_input_focus")
+
+	self.exp_mode = 1
+	self.congrats = false
+end
+
+function on_input(self, action_id, action)
+	local screen = vmath.vector3(action.x, action.y, 0)
+	local w_pos = camera.screen_to_world(nil, screen)
+
+	if action.pressed and action_id == hash("touch") then
+		if self.exp_mode == 1 then
+			factory.create("/go#exp1", w_pos)
+			timer.delay(0.3, false, function()
+				camera.shake(hash("/camera"), 0.02, 0.1)
+				msg.post("main:/sound#sound_gate", "sound", {name = "baku1"})
+			end)
+		elseif self.exp_mode == 2 then
+			factory.create("/go#exp2", w_pos)
+			msg.post("main:/sound#sound_gate", "sound", {name = "baku2"})
+			if self.congrats == false then
+				self.congrats = true
+				timer.delay(1.5, false, function()
+					particlefx.play("#kamifubuki")
+				end)
+			end
+		end
+	elseif action.pressed and action_id == hash("space") then
+		-- self.exp_modeを１と２で切り替える
+		self.exp_mode = self.exp_mode == 1 and 2 or 1
+		msg.post("main:/sound#sound_gate", "sound", {name = "select"})
+	end
+end
