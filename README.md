@@ -1,4 +1,5 @@
 # [Defold](https://defold.com) community challenges
+![samplegif](https://github.com/yeqwep/Explosion-particle-example/blob/main/a.gif)
 ## :bomb::bomb: Firecrackers!! :bomb::bomb:
   
 This is an example of using Defold's particle feature to simulate an explosion.
