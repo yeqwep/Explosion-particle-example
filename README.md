@@ -4,5 +4,6 @@
   
 This is an example of using Defold's particle feature to simulate an explosion.
   
+[Play the demo](https://yeqwep.itch.io/firecrackers)
 
 ## Explosion - [forum thread link](https://forum.defold.com/t/community-challenge-explosions/77315)
